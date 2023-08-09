@@ -14,11 +14,17 @@ public class ViewController {
     @Autowired
     CollectService collectService;
 
-    @GetMapping("/hello")
-    public String hello(Model model){
+    @GetMapping("/data")
+    public String data(Model model){
 
         model.addAttribute("jsonData", collectService.getApiDate());
 
-        return "/view/hello";
+        return "/view/data";
+    }
+
+    @GetMapping("/map")
+    public String map(Model model){
+
+        return "/view/map";
     }
 }
