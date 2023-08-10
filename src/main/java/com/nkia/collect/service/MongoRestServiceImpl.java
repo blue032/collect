@@ -44,6 +44,12 @@ public class MongoRestServiceImpl implements MongoRestService {
     }
 
     @Override
+    public FindIterable<Document> findByQuery(String collectionName, Bson query) {
+        MongoCollection<Document> collection = mongoDatabase.getCollection(collectionName);
+        return collection.find(eq(query));
+    }
+
+    @Override
     public Document findById(String collectionName, String id) {
         MongoCollection<Document> collection = mongoDatabase.getCollection(collectionName);
         return collection.find(eq("_id", new ObjectId(id))).first();

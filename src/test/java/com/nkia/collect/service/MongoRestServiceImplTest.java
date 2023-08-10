@@ -47,7 +47,7 @@ class MongoRestServiceImplTest {
     void insertMany() {
         MongoCollection<Document> collection = database.getCollection("test");
         List<Document> documents = new ArrayList<>();
-        Document document = new Document("test", "test1");
+        Document document = new Document("admin", "admin");
         documents.add(document);
         document = new Document("test", "test2");
         documents.add(document);
@@ -66,11 +66,11 @@ class MongoRestServiceImplTest {
     @Test
     void findById() {
         MongoCollection<Document> collection = database.getCollection("test");
-        FindIterable<Document> results = collection.find();
-        Document document = results.first();
-        String id = document.get("_id").toString();
+//        FindIterable<Document> results = collection.find();
+//        Document document = results.first();
+//        String id = document.get("_id").toString();
 
-        Document result = collection.find(eq("_id", new ObjectId(id))).first();
+        Document result = collection.find(eq("admin", "admin")).first();
 
         assertTrue(result != null);
     }

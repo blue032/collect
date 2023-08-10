@@ -3,18 +3,72 @@
 <head>
     <meta charset="UTF-8">
     <title>map</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
 </head>
 <body>
-    <div id="map" style="width:500px;height:400px;"></div>
+    <input type="button" value="데이터 가져오기" onclick="getData();">
+    <br/>
+    <br/>
+    <div id="map" style="width:1000px;height:600px;"></div>
     <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=3146c1c993d2fc8e50666c0efbf85f30&libraries=services,clusterer,drawing"></script>
     <script>
+
         var container = document.getElementById('map');
         var options = {
-            center: new kakao.maps.LatLng(33.450701, 126.570667),
+            center: new kakao.maps.LatLng(37.5642135, 127.0016985),
             level: 3
         };
 
         var map = new kakao.maps.Map(container, options);
+
+        function getData() {
+            $.ajax({
+                type:'GET', //요청 메서드
+                url: 'http://localhost:8080/datas/line', //요청 URI //요청 헤더
+                dataType : 'json', //전송할 데이터 타입
+                success : function(result) {//서버로부터 응답잉 도착하면 호출될 함수
+                    newMap(result);
+                },
+                error : function() {
+                    alert("error");
+                } //에러가 발생했을 때 호출될 함수
+            }); //$.ajax()
+        }
+
+        function newMap(result) {
+            let json1 = result[0];
+
+            let vhcleLot = json1.vhcleLot;
+            let vhcleLat = json1.vhcleLat;
+            options = {
+                center: new kakao.maps.LatLng(vhcleLat, vhcleLot),
+                level: 3
+            };
+
+            map.container = container;
+            map.options = options;
+
+            for(let i = 0; i < result.length; i++){
+                vhcleLot = result[i].vhcleLot;
+                vhcleLat = result[i].vhcleLat;
+                let imageSrc = 'https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/marker_red.png', // 마커이미지의 주소입니다
+                    imageSize = new kakao.maps.Size(64, 69), // 마커이미지의 크기입니다
+                    imageOption = {offset: new kakao.maps.Point(27, 69)}; // 마커이미지의 옵션입니다. 마커의 좌표와 일치시킬 이미지 안에서의 좌표를 설정합니다.
+
+// 마커의 이미지정보를 가지고 있는 마커이미지를 생성합니다
+                let markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize, imageOption),
+                    markerPosition = new kakao.maps.LatLng(vhcleLat, vhcleLot); // 마커가 표시될 위치입니다
+
+// 마커를 생성합니다
+                let marker = new kakao.maps.Marker({
+                    position: markerPosition,
+                    image: markerImage // 마커이미지 설정
+                });
+// 마커가 지도 위에 표시되도록 설정합니다
+                marker.setMap(map)
+            }
+        }
+
     </script>
 </body>
 </html>

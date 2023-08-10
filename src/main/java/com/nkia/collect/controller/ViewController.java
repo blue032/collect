@@ -16,8 +16,8 @@ public class ViewController {
 
     @GetMapping("/data")
     public String data(Model model){
-
         model.addAttribute("jsonData", collectService.getApiDate());
+        model.addAttribute("test", "HI");
 
         return "/view/data";
     }
