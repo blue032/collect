@@ -53,7 +53,7 @@ public class MongoRestServiceImpl implements MongoRestService {
         Bson filter = Filters.and(Filters.gte("trsmDy", Integer.parseInt(fromDate)), // start just after our last position
                 Filters.lt("trsmDy", Integer.parseInt(toDate)));
 
-        if(time != null && time.isEmpty()) {
+        if(time != null && !time.isEmpty()) {
             filter = Filters.and(Filters.gte("trsmDy", Integer.parseInt(fromDate)), // start just after our last position
                     Filters.lte("trsmDy", Integer.parseInt(toDate))
                     ,Filters.gte("trsmTm", time+"0000")
