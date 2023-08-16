@@ -29,9 +29,14 @@ public class DataRestService {
         System.out.println(searchKeys.toString());
 
         JSONArray jsonArray =  new JSONArray();
-        boolean lineKey = Boolean.parseBoolean(searchKeys.get("lineKey"));
         //boolean안이 체크박스 선택하는거 그래서 5개 만들기
+
+        boolean lineKey = Boolean.parseBoolean(searchKeys.get("lineKey"));
         boolean frontKey = Boolean.parseBoolean(searchKeys.get("frontKey"));
+        boolean conditiontKey = Boolean.parseBoolean(searchKeys.get("conditionKey"));
+        boolean dangerKey = Boolean.parseBoolean(searchKeys.get("dangerKey"));
+        boolean pestriangiKey = Boolean.parseBoolean(searchKeys.get("pedestrianKey"));
+
 
         if(lineKey ==  true) {
             jsonArray.put(searchService.getLineData(searchKeys));
