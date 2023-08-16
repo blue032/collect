@@ -8,5 +8,6 @@ public class CollectApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(CollectApplication.class, args);
+		
 	}
 }
