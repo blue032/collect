@@ -17,7 +17,7 @@ public interface MongoRestService {
     public InsertOneResult insertOne(String collectionName, Document document);
     public InsertManyResult insertMany(String collectionName, List<Document> documents);
     public FindIterable<Document> find(String collectionName);
-    public JSONArray findByQuery(String collectionName, String fromDate, String toDate);
+    public JSONArray findByQuery(String collectionName, String fromDate, String toDate, String time);
     public Document findById(String collectionName, String id);
     public UpdateResult updateOne(String collectionName, String id, Bson update);
     public UpdateResult updateMany(String collectionName, Bson query, Bson updates);

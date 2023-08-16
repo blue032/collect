@@ -23,6 +23,9 @@ public class DataRestService {
     // key : fromDate, toDate
     @PostMapping("/cits")
     public String getCits(@RequestParam Map<String, String> searchKeys) {
+
+        System.out.println(searchKeys.toString());
+
         JSONArray jsonArray =  new JSONArray();
         boolean lineKey = Boolean.parseBoolean(searchKeys.get("lineKey"));
         boolean frontKey = Boolean.parseBoolean(searchKeys.get("frontKey"));
@@ -32,6 +35,8 @@ public class DataRestService {
         } else if(frontKey == true) {
             //jsonArray.put(searchService.getFrontData(searchKeys));
         }
+
+        System.out.println(jsonArray.toString());
 
         return jsonArray.toString();
     }

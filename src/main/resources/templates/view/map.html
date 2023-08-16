@@ -16,7 +16,8 @@
 <script>
 
     let lineKey = 'true';
-    const frontKey = 'true';
+    let frontKey = 'true';
+    let searchTime = 10;
 
     $("#date").datepicker({dateFormat: 'yy-mm-dd'
         ,changeYear: true //콤보박스에서 년 선택 가능
@@ -105,6 +106,7 @@
     var map = new kakao.maps.Map(container, options);
 
     function getData() {
+
         $.ajax({
             type:'POST', //요청 메서드
             url: 'http://localhost:8080/datas/cits', //요청 URI //요청 헤더
@@ -112,7 +114,8 @@
                 "lineKey": lineKey,
                 "frontKey": frontKey,
                 "fromDate":"6",
-                "toDate":"16"
+                "toDate":"16",
+                "time": searchTime
             },
             dataType : 'json', //전송할 데이터 타입
             success : function(result) {//서버로부터 응답잉 도착하면 호출될 함수
@@ -124,7 +127,8 @@
         }); //$.ajax()
     }
 
-    function newMap(result) {
+    function newMap(data) {
+        let result = data[0];
         let json1 = result[0];
 
         let vhcleLot = json1.vhcleLot;

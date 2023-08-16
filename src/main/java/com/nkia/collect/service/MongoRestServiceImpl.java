@@ -47,15 +47,26 @@ public class MongoRestServiceImpl implements MongoRestService {
     }
 
     @Override
-    public JSONArray findByQuery(String collectionName, String fromDate, String toDate) {
+    public JSONArray findByQuery(String collectionName, String fromDate, String toDate, String time) {
         MongoCollection<Document> collection = mongoDatabase.getCollection(collectionName);
+
         Bson filter = Filters.and(Filters.gte("trsmDy", Integer.parseInt(fromDate)), // start just after our last position
                 Filters.lt("trsmDy", Integer.parseInt(toDate)));
+
+        if(time != null && time.isEmpty()) {
+            filter = Filters.and(Filters.gte("trsmDy", Integer.parseInt(fromDate)), // start just after our last position
+                    Filters.lte("trsmDy", Integer.parseInt(toDate))
+                    ,Filters.gte("trsmTm", time+"0000")
+                    , Filters.lte("trsmTm", time+"5959")
+            );
+        }
+
         FindIterable<Document> result = collection.find(filter);
         JSONArray array = new JSONArray();
         for(Document d : result) {
             array.put(new JSONObject(d.toJson()));
         }
+
         return array;
     }
 
