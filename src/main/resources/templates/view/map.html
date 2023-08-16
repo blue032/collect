@@ -4,71 +4,164 @@
     <meta charset="UTF-8">
     <title>map</title>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <script src="https://code/jquery.com/jquery-1.12.4.js"></script>
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 </head>
 <body>
-    <input type="button" value="데이터 가져오기" onclick="getData();">
-    <br/>
-    <br/>
-    <div id="map" style="width:1000px;height:600px;"></div>
-    <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=3146c1c993d2fc8e50666c0efbf85f30&libraries=services,clusterer,drawing"></script>
-    <script>
+<input type="button" value="데이터 가져오기" onclick="getData();">
 
-        var container = document.getElementById('map');
-        var options = {
-            center: new kakao.maps.LatLng(37.5642135, 127.0016985),
+<input type = "text" id = "date">
+
+<script>
+
+    let lineKey = 'true';
+    const frontKey = 'true';
+
+    $("#date").datepicker({dateFormat: 'yy-mm-dd'
+        ,changeYear: true //콤보박스에서 년 선택 가능
+        ,changeMonth: true //콤보박스에서 월 선택 가능
+    });
+</script>
+<br/>
+<br/>
+
+<!--<label>-->
+<!--    <input type="checkbox" id="option1"> Option 1-->
+<!--</label><br>-->
+
+<!--<label>-->
+<!--    <input type="checkbox" id="option2"> Option 2-->
+<!--</label><br>-->
+
+<!--<label>-->
+<!--    <input type="checkbox" id="option3"> Option 3-->
+<!--</label><br>-->
+
+<p id="result">Selected Options:</p>
+
+<script>
+    // 체크박스 요소들을 가져옵니다.
+    // const option1Checkbox = document.getElementById("option1");
+    // const option2Checkbox = document.getElementById("option2");
+    // const option3Checkbox = document.getElementById("option3");
+    // const resultParagraph = document.getElementById("result");
+
+    // 체크박스 클릭 이벤트 리스너를 추가합니다.
+    // option1Checkbox.addEventListener("change", updateResult);
+    // option2Checkbox.addEventListener("change", updateResult);
+    // option3Checkbox.addEventListener("change", updateResult);
+
+    // function updateResult() {
+    //     let selectedOptions = [];
+    //
+    //     if (option1Checkbox.checked) {
+    //         selectedOptions.push("Option 1");
+    //     }
+    //
+    //     if (option2Checkbox.checked) {
+    //         selectedOptions.push("Option 2");
+    //     }
+    //
+    //     if (option3Checkbox.checked) {
+    //         selectedOptions.push("Option 3");
+    //     }
+    //
+    //     if (selectedOptions.length > 0) {
+    //         resultParagraph.textContent = "Selected Options: " + selectedOptions.join(", ");
+    //     } else {
+    //         resultParagraph.textContent = "Selected Options: None";
+    //     }
+    // }
+</script> */
+
+
+
+
+<input id="lineCheckBox" type="checkbox" name="차선 이탈" onchange="getLineData(this.value)"> 차선 이탈
+<input type="checkbox" name="보행자 충돌" value=" getCheckboxValue();"> 보행자 충돌
+<input type="checkbox" name="위험구간" value=" getCheckboxValue();"> 위험구간
+<input type="checkbox" name="전방추돌" value=" getCheckboxValue();"> 전방추돌
+
+<script>
+       function getLineData(value) {
+           lineKey = value;
+           getData();
+       }
+</script>
+
+<br/>
+<br/>
+<div id="map" style="width:1000px;height:600px;"></div>
+<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=3146c1c993d2fc8e50666c0efbf85f30&libraries=services,clusterer,drawing"></script>
+<script>
+
+    var container = document.getElementById('map');
+    var options = {
+        center: new kakao.maps.LatLng(37.5642135, 127.0016985),
+        level: 3
+    };
+
+    var map = new kakao.maps.Map(container, options);
+
+    function getData() {
+        $.ajax({
+            type:'POST', //요청 메서드
+            url: 'http://localhost:8080/datas/cits', //요청 URI //요청 헤더
+            data: {
+                "lineKey": lineKey,
+                "frontKey": frontKey,
+                "fromDate":"6",
+                "toDate":"16"
+            },
+            dataType : 'json', //전송할 데이터 타입
+            success : function(result) {//서버로부터 응답잉 도착하면 호출될 함수
+                newMap(result);
+            },
+            error : function() {
+                alert("error");
+            } //에러가 발생했을 때 호출될 함수
+        }); //$.ajax()
+    }
+
+    function newMap(result) {
+        let json1 = result[0];
+
+        let vhcleLot = json1.vhcleLot;
+        let vhcleLat = json1.vhcleLat;
+        options = {
+            center: new kakao.maps.LatLng(vhcleLat, vhcleLot),
             level: 3
         };
 
-        var map = new kakao.maps.Map(container, options);
+        map.container = container;
+        map.options = options;
 
-        function getData() {
-            $.ajax({
-                type:'GET', //요청 메서드
-                url: 'http://localhost:8080/datas/line', //요청 URI //요청 헤더
-                dataType : 'json', //전송할 데이터 타입
-                success : function(result) {//서버로부터 응답잉 도착하면 호출될 함수
-                    newMap(result);
-                },
-                error : function() {
-                    alert("error");
-                } //에러가 발생했을 때 호출될 함수
-            }); //$.ajax()
-        }
-
-        function newMap(result) {
-            let json1 = result[0];
-
-            let vhcleLot = json1.vhcleLot;
-            let vhcleLat = json1.vhcleLat;
-            options = {
-                center: new kakao.maps.LatLng(vhcleLat, vhcleLot),
-                level: 3
-            };
-
-            map.container = container;
-            map.options = options;
-
-            for(let i = 0; i < result.length; i++){
-                vhcleLot = result[i].vhcleLot;
-                vhcleLat = result[i].vhcleLat;
-                let imageSrc = '/icons/car.png', // 마커이미지의 주소입니다
-                    imageSize = new kakao.maps.Size(50, 25), // 마커이미지의 크기입니다
-                    imageOption = {offset: new kakao.maps.Point(27, 69)}; // 마커이미지의 옵션입니다. 마커의 좌표와 일치시킬 이미지 안에서의 좌표를 설정합니다.
+        for(let i = 0; i < result.length; i++){
+            vhcleLot = result[i].vhcleLot;
+            vhcleLat = result[i].vhcleLat;
+            let imageSrc = '/icons/car.png', // 마커이미지의 주소입니다
+                imageSize = new kakao.maps.Size(50, 25), // 마커이미지의 크기입니다
+                imageOption = {offset: new kakao.maps.Point(27, 69)}; // 마커이미지의 옵션입니다. 마커의 좌표와 일치시킬 이미지 안에서의 좌표를 설정합니다.
 
 // 마커의 이미지정보를 가지고 있는 마커이미지를 생성합니다
-                let markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize, imageOption),
-                    markerPosition = new kakao.maps.LatLng(vhcleLat, vhcleLot); // 마커가 표시될 위치입니다
+            let markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize, imageOption),
+                markerPosition = new kakao.maps.LatLng(vhcleLat, vhcleLot); // 마커가 표시될 위치입니다
 
 // 마커를 생성합니다
-                let marker = new kakao.maps.Marker({
-                    position: markerPosition,
-                    image: markerImage // 마커이미지 설정
-                });
+            let marker = new kakao.maps.Marker({
+                position: markerPosition,
+                image: markerImage // 마커이미지 설정
+            });
 // 마커가 지도 위에 표시되도록 설정합니다
-                marker.setMap(map)
-            }
+            marker.setMap(map)
         }
+    }
 
-    </script>
+    window.onload = getData();
+</script>
+
+
+
 </body>
 </html>

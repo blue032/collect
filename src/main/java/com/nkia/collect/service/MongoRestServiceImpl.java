@@ -1,10 +1,9 @@
 package com.nkia.collect.service;
 
-import static com.mongodb.client.model.Filters.eq;
-
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
+import com.mongodb.client.model.Filters;
 import com.mongodb.client.result.DeleteResult;
 import com.mongodb.client.result.InsertManyResult;
 import com.mongodb.client.result.InsertOneResult;
@@ -12,9 +11,13 @@ import com.mongodb.client.result.UpdateResult;
 import org.bson.Document;
 import org.bson.conversions.Bson;
 import org.bson.types.ObjectId;
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+
+import static com.mongodb.client.model.Filters.*;
 
 @Service
 public class MongoRestServiceImpl implements MongoRestService {
@@ -44,9 +47,16 @@ public class MongoRestServiceImpl implements MongoRestService {
     }
 
     @Override
-    public FindIterable<Document> findByQuery(String collectionName, Bson query) {
+    public JSONArray findByQuery(String collectionName, String fromDate, String toDate) {
         MongoCollection<Document> collection = mongoDatabase.getCollection(collectionName);
-        return collection.find(eq(query));
+        Bson filter = Filters.and(Filters.gte("trsmDy", Integer.parseInt(fromDate)), // start just after our last position
+                Filters.lt("trsmDy", Integer.parseInt(toDate)));
+        FindIterable<Document> result = collection.find(filter);
+        JSONArray array = new JSONArray();
+        for(Document d : result) {
+            array.put(new JSONObject(d.toJson()));
+        }
+        return array;
     }
 
     @Override
