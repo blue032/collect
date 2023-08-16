@@ -14,7 +14,9 @@ public class DataRestService {
 
     private static final String KEY_LINE = "line";
     private static final String KEY_PEDESTRIAN = "pedestrian";
-    private static final String KEY_FRONT = "front";
+    private static final String KEY_FRONT = "front"; //이것도 5개 만들어주기
+    private static final String KEY_DANGER = "danger";
+    private static final String KEY_CONDITION = "condition";
 
     @Autowired
     SearchService searchService;
@@ -28,6 +30,7 @@ public class DataRestService {
 
         JSONArray jsonArray =  new JSONArray();
         boolean lineKey = Boolean.parseBoolean(searchKeys.get("lineKey"));
+        //boolean안이 체크박스 선택하는거 그래서 5개 만들기
         boolean frontKey = Boolean.parseBoolean(searchKeys.get("frontKey"));
 
         if(lineKey ==  true) {
