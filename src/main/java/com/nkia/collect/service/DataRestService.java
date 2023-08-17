@@ -40,7 +40,7 @@ public class DataRestService {
         //여기 수정했음
         if(lineKey ==  true) {
             jsonArray.put(searchService.getLineData(searchKeys));
-        } else if(frontKey == true) {
+        } /*else if(frontKey == true) {
             jsonArray.put(searchService.getFrontData(searchKeys)); //FrontData 만들어야함
         }else if (conditionKey == true) {
         	jsonArray.put(searchService.getconditionData(searchKeys)); //conditionData 만들어야함
@@ -48,7 +48,7 @@ public class DataRestService {
         	jsonArray.put(searchService.getdangerData(searchKeys)); //dangerData 만들어야함.
         }else if (pedestrianKey == true) {
         	jsonArray.put(searchService.getpedestrianData(searchKeys)); //pedestrianData만들어함
-        }
+        }*/
 
         System.out.println(jsonArray.toString());
 
