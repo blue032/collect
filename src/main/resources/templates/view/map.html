@@ -6,6 +6,31 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
     <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    
+    <style>
+    #checkboxContainer {
+    	position: absolute;
+    	top: 100px; 
+    	right: 10px; /*오른쪽에 정렬*/
+    	z-index:100;
+    	background-color: rgb(218, 240, 113);
+    	padding: 10px;
+    	border-radius: 5px;
+    	max-width: 150px; /*최대너비지정*/
+    }
+    
+    .checkboxGroup {
+    	display: flex;
+    	flex-direction: column;
+    	margin-bottom: 5px;
+    }
+    
+    .checkboxLabel {
+    	margin: 2px 0; /*상하여백설정*/
+    }
+    
+    </style>
+    
 </head>
 <body>
 <input type="button" value="데이터 가져오기" onclick="getData();">
@@ -15,6 +40,8 @@
 
     let lineKey = 'true';
     let frontKey = 'true';
+    let dangerKey = 'true';
+    let pedestrianKey ='true';
     let searchTime = 10;
 
     $("#date").datepicker({dateFormat: 'yy-mm-dd'
@@ -25,77 +52,75 @@
 <br/>
 <br/>
 
-<!--<label>-->
-<!--    <input type="checkbox" id="option1"> Option 1-->
-<!--</label><br>-->
 
-<!--<label>-->
-<!--    <input type="checkbox" id="option2"> Option 2-->
-<!--</label><br>-->
-
-<!--<label>-->
-<!--    <input type="checkbox" id="option3"> Option 3-->
-<!--</label><br>-->
-
-<p id="result">Selected Options:</p>
-
-<script> //여기 다 지워도 됨
-    // 체크박스 요소들을 가져옵니다.
-    // const option1Checkbox = document.getElementById("option1");
-    // const option2Checkbox = document.getElementById("option2");
-    // const option3Checkbox = document.getElementById("option3");
-    // const resultParagraph = document.getElementById("result");
-
-    // 체크박스 클릭 이벤트 리스너를 추가합니다.
-    // option1Checkbox.addEventListener("change", updateResult);
-    // option2Checkbox.addEventListener("change", updateResult);
-    // option3Checkbox.addEventListener("change", updateResult);
-
-    // function updateResult() {
-    //     let selectedOptions = [];
-    //
-    //     if (option1Checkbox.checked) {
-    //         selectedOptions.push("Option 1");
-    //     }
-    //
-    //     if (option2Checkbox.checked) {
-    //         selectedOptions.push("Option 2");
-    //     }
-    //
-    //     if (option3Checkbox.checked) {
-    //         selectedOptions.push("Option 3");
-    //     }
-    //
-    //     if (selectedOptions.length > 0) {
-    //         resultParagraph.textContent = "Selected Options: " + selectedOptions.join(", ");
-    //     } else {
-    //         resultParagraph.textContent = "Selected Options: None";
-    //     }
-    // }
-</script> */
-
-
-
-
-<input id="lineCheckBox" type="checkbox" name="차선 이탈" onchange="getLineData(this.value)"> 차선 이탈
-<input type="checkbox" name="보행자 충돌" value=" getCheckboxValue();"> 보행자 충돌
-<input type="checkbox" name="위험구간" value=" getCheckboxValue();"> 위험구간
-<input type="checkbox" name="전방추돌" value=" getCheckboxValue();"> 전방추돌
+<input id="lineCheckBox" type="checkbox" name="line" onchange="getLineData(this.value)"> 차선 이탈
+<input id="pedestrianCheckBox" type="checkbox" name="pedestrian" onchange="getPedestrianData(this.value)"> 보행자 충돌
+<input id="dangerCheckBox" type="checkbox" name="danger" onchange="getDangerData(this.value)"> 위험구간
+<input id="frontCheckBox" type="checkbox" name="front" onchange="getFrontData(this.value)"> 전방추돌
 
 <script>
        function getLineData(value) {
            lineKey = value;
            getData();
        }
+       
+       function getPedestrianData(value) {
+           pedestrianeKey = value;
+           getData();
+       }
+       
+       function getDangerData(value) {
+           dangerKey = value;
+           getData();
+       }
+       
+       function getFrontData(value) {
+           frontKey = value;
+           getData();
+       }
+       
 </script>
 
 <br/>
 <br/>
-<div id="map" style="width:1000px;height:600px;"></div>
+<div id="map" style="width:1260px;height:600px;"></div>
+
+<div id = "checkboxContainer">
+	<div class = "checkboxGroup">
+		<label class = "checkbox">
+			<input id="lineCheckBox" type="checkbox" name="line" onchange="getLineData(this.value)"> 차선 이탈
+		</label>
+	</div>
+	
+	<div class = "checkboxGroup">
+		<label class = "checkboxLabel">
+			<input id="pedestrianCheckBox" type="checkbox" name="pedestrian" onchange="getPedestrianData(this.value)"> 보행자 충돌
+		</label>
+	</div>
+	
+		<div class = "checkboxGroup">
+		<label class = "checkboxLabel">
+			<input id="dangerCheckBox" type="checkbox" name="danger" onchange="getDangerData(this.value)"> 위험구간
+		</label>
+	</div>
+	
+	<div class = "checkboxGroup">
+		<label class = "checkboxLabel">
+			<input id="frontCheckBox" type="checkbox" name="front" onchange="getFrontData(this.value)"> 전방추돌
+		</label>
+	</div>
+	
+	
+</div>
+
 <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=3146c1c993d2fc8e50666c0efbf85f30&libraries=services,clusterer,drawing"></script>
 <script>
 
     var container = document.getElementById('map');
+    var checkbox = document.getElementById('line');
+    var checkbox = document.getElementById('pedestrian');
+    var checkbox = document.getElementById('danger');
+    var checkbox = document.getElementById('front');
     var options = {
         center: new kakao.maps.LatLng(37.5642135, 127.0016985),
         level: 3
@@ -158,6 +183,44 @@
             marker.setMap(map)
         }
     }
+    
+// 체크박스 상태에 따라 마커 표시 여부를 제어
+	checkbox.addEventListener("change",
+		function () {
+			if (checkbox.checked) {
+				showMarkers(); 
+			} else {
+				hideMarkders();
+			}
+	});
+	
+	// 마커들을 생성하고 지도에 추가
+	const markers = [];
+	const markerPositions = [
+		new kakao.map.LatLng(37.5665, 126.9780),
+		new kakao.map.LatLng(35.6895, 139.6917),
+		new kakao.map.LatLng(40.7128, -74.0060), 
+	];
+    
+	for (const position of markerPositions) {
+		const marker = new kakao.map.Marker({
+			position: position,
+		});
+		markers.push(marker);
+	}
+	
+	function showMarkers() {
+		for(const marker of marker) {
+			marker.setMap(map);
+		}
+	}
+		
+	function hideMarkers() {
+		for(const marker of markers) {
+			marker.setMap(null);
+		}
+	}
+	
 
     window.onload = getData();
 </script>
