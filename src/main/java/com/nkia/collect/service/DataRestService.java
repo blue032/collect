@@ -37,16 +37,6 @@ public class DataRestService {
         //if문을 사용해서 모든 선택된 키에 대해 검색을 할 수 있도록.
         if (lineKey) {
             jsonArray.put(searchService.getLineData(searchKeys));
-<<<<<<< HEAD
-        } else if(frontKey == true) {
-            jsonArray.put(searchService.getFrontData(searchKeys)); //FrontData 만들어야함
-        }else if (conditionKey == true) {
-        	jsonArray.put(searchService.getconditionData(searchKeys)); //conditionData 만들어야함
-        }else if (dangerKey == true) {
-        	jsonArray.put(searchService.getdangerData(searchKeys)); //dangerData 만들어야함.
-        }else if (pedestrianKey == true) {
-        	jsonArray.put(searchService.getpedestrianData(searchKeys)); //pedestrianData만들어함
-=======
         }
         if (frontKey) {
             jsonArray.put(searchService.getFrontData(searchKeys));
@@ -59,7 +49,6 @@ public class DataRestService {
         }
         if (pedestrianKey) {
             jsonArray.put(searchService.getPedestrianData(searchKeys));
->>>>>>> ef84d236b06ab1a4f5615d1357e4cd30f2163b94
         }
 
         System.out.println(jsonArray.toString());

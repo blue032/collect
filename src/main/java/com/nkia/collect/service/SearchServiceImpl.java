@@ -33,7 +33,7 @@ public class SearchServiceImpl implements SearchService {
         return mongoRestService.findByQuery(COLLECTION_LINE, fromDate, toDate, time);
 
     }
-    //여기 밑부분 수정했음
+    
     public JSONArray getFrontData(Map<String, String> searchKeys) {
 
         String fromDate = searchKeys.get("fromDate");
