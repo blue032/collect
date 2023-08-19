@@ -18,4 +18,6 @@ public class Common {
     private String trsmMs; 
     private String vhcleLat;
     private String vhcleLot;
+    private String ldws; 
+    private String pcws;
 }

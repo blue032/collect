@@ -6,7 +6,6 @@ import lombok.Setter;
 @Getter@Setter
 public class Line extends Common {
 
-    private String ldws;
-    private String pcws;
+  
 
 }

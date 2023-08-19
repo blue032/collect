@@ -7,6 +7,6 @@ import lombok.Setter;
 public class Danger extends Common {
 
     private String itisCd;
-    private String detclot;
-    private String detclat;
+    private String detcLot;
+    private String detcLat;
 }

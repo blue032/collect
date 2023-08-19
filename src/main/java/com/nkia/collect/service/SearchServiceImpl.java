@@ -30,7 +30,7 @@ public class SearchServiceImpl implements SearchService {
         String toDate = searchKeys.get("toDate");
         String time = searchKeys.get("time");
 
-        return mongoRestService.findByQuery(COLLECTION_LINE, fromDate, toDate, time);
+        return mongoRestService.findByQuery(COLLECTION_LINE, fromDate, toDate, time); 
 
     }
     
