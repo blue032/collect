@@ -18,12 +18,15 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 import static com.mongodb.client.model.Filters.*;
-
+import lombok.Getter;
+import lombok.Setter;
+@Getter@Setter
 @Service //컨트롤러, 리포지토리에서 사용 가능
 public class MongoRestServiceImpl implements MongoRestService {
-
+	
     private final MongoDatabase mongoDatabase; //생성자를 통해 mongoDatabase 객체 주입받음
-
+    
+    
     public MongoRestServiceImpl(MongoDatabase mongoDatabase) {
         this.mongoDatabase = mongoDatabase; //생성자를 통해 mongoDatabase 객체 주입받음
     }
@@ -49,7 +52,12 @@ public class MongoRestServiceImpl implements MongoRestService {
     @Override
     public JSONArray findByQuery(String collectionName, String fromDate, String toDate, String time) {
         MongoCollection<Document> collection = mongoDatabase.getCollection(collectionName); //몽고디비의 컬렉션 얻어옴
-    
+        
+
+        
+        int year = 2023; // 원하는 연도를 설정
+        int month = 8;   // 원하는 월을 설정
+
         //filter라는 비슨객체 생성, 몽고디비 쿼리 구성하는 데 사용
         Bson filter = Filters.and(Filters.gte("trsmDy", Integer.parseInt(fromDate)), // start just after our last position
                 Filters.lt("trsmDy", Integer.parseInt(toDate))); //trsmDy가 fromDatez(gte)이상 ~ toDate 미만(lt)
@@ -62,7 +70,63 @@ public class MongoRestServiceImpl implements MongoRestService {
                     , Filters.lte("trsmTm", time+"5959")
             );
         }
+        
+       //if문으로
+        if (collectionName.equals("COLLECTION_LINE")) {
+            filter = Filters.and(
+                Filters.eq("trsmDy", String.valueOf(dd)),
+                Filters.eq("vhcleLot", common.getVhcleLot()),
+                Filters.eq("vhcleLat", common.getVhcleLat()),
+                Filters.eq("ldws", common.getLdws()),     // 필요한 다른 필드도 추가
+                Filters.eq("pcws", common.getPcws())
+                
+               
+            );
+        }
+        if (collectionName.equals("COLLECTION_CONDITION")) {
+            filter = Filters.and(
+                Filters.eq("trsmDy", String.valueOf(dd)),
+                Filters.eq("vhcleLot", common.getVhcleLot()),
+                Filters.eq("vhcleLat", common.getVhcleLat()),
+                Filters.eq("ldws", common.getLdws()),     // 필요한 다른 필드도 추가
+                Filters.eq("pcws", common.getPcws())   
+               
+            );
+        }
+        if (collectionName.equals("COLLECTION_FRONT")) {
+            filter = Filters.and(
+                Filters.eq("trsmDy", String.valueOf(day)),
+                Filters.eq("vhcleLot", common.getVhcleLot()),
+                Filters.eq("vhcleLat", common.getVhcleLat()),
+                Filters.eq("ldws", common.getLdws()),     // 필요한 다른 필드도 추가
+                Filters.eq("pcws", common.getPcws())
+               
+            );
+        }
+        if (collectionName.equals("COLLECTION_PESTRIAN")) {
+            filter = Filters.and(
+                Filters.eq("trsmDy", String.valueOf(dd)),
+                Filters.eq("vhcleLot", common.getVhcleLot()),
+                Filters.eq("vhcleLat", common.getVhcleLat()),
+                Filters.eq("ldws", common.getLdws()),     // 필요한 다른 필드도 추가
+                Filters.eq("pcws", common.getPcws())
 
+               
+            );
+        }
+        if (collectionName.equals("COLLECTION_DANGER")) {
+            filter = Filters.and(
+                Filters.eq("trsmDy", String.valueOf(dd)),
+                Filters.eq("ldws", common.getLdws()),     // 필요한 다른 필드도 추가
+                Filters.eq("pcws", common.getPcws()),
+                Filters.eq("detcLot", danger.getDetcLot()),
+                Filters.eq("detcLat", danger.getDetcLat()),
+                Filters.eq("itisCd", danger.getDetcLat()) 
+
+            );
+        }
+    }
+        
         FindIterable<Document> result = collection.find(filter); //위에서 정의한 filter 사용하여 문서 검색
         JSONArray array = new JSONArray();
         for(Document d : result) {
@@ -72,6 +136,8 @@ public class MongoRestServiceImpl implements MongoRestService {
         return array;
     }
 
+    
+    
     @Override
     public Document findById(String collectionName, String id) {
         MongoCollection<Document> collection = mongoDatabase.getCollection(collectionName);
