@@ -1,4 +1,5 @@
 //CollectServicelmpl 클래스
+//api를 연결해서 데이터를 MongoDB에 저장
 
 package com.nkia.collect.service;
 

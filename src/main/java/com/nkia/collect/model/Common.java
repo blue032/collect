@@ -1,3 +1,4 @@
+//데이터 중에 공통변수들 정리
 package com.nkia.collect.model;
 
 import lombok.Getter;
