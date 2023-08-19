@@ -4,7 +4,8 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Getter@Setter
-public class front extends Common {
+public class Front extends Common {
 
-    private String frontCode;
+    private String ldws; 
+    private String pcws;
 }

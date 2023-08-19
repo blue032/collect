@@ -9,8 +9,8 @@ import lombok.Setter;
 @Getter @Setter //어노테이션 사용으로 매소드 자동 생성
 public class Common {
 
-    private String dataId; //위험구간은 없음???
-    private String trmnId; //위험구간 없음???
+    private String dataId; 
+    private String trmnId;
     private String trsmYear; //년도
     private String trsmMt; //월
     private String trsmDy; //일
