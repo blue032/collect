@@ -9,24 +9,31 @@
     
     <style>
     #checkboxContainer {
-    	position: absolute;
-    	top: 100px; 
-    	right: 10px; /*오른쪽에 정렬*/
-    	z-index:100;
-    	background-color: rgb(218, 240, 113);
-    	padding: 10px;
-    	border-radius: 5px;
-    	max-width: 150px; /*최대너비지정*/
+        position: absolute;
+        top: 110px; 
+        right: 10px;
+        z-index: 100;
+        background-color: rgb(218, 240, 113);
+        padding: 10px;
+        border-radius: 5px;
+        max-width: 150px;
+    }
+    
+    .datepicker-container {
+        position: absolute;
+        top: 60px;
+        right: 10px;
+        z-index: 200; /* 날짜 선택 위에 올리기 */
     }
     
     .checkboxGroup {
-    	display: flex;
-    	flex-direction: column;
-    	margin-bottom: 5px;
+        display: flex;
+        flex-direction: column;
+        margin-bottom: 5px;
     }
     
     .checkboxLabel {
-    	margin: 2px 0; /*상하여백설정*/
+        margin: 2px 0;
     }
     
     </style>
@@ -35,23 +42,26 @@
 <body>
 <input type="button" value="데이터 가져오기" onclick="getData();">
 
-<input type = "text" id = "date">
+<div class="datepicker-container">
+    <input type="text" id="date">
+</div>
+
 <script>
 
     let lineKey = 'true';
     let frontKey = 'true';
     let dangerKey = 'true';
-    let pedestrianKey ='true';
+    let pedestrianKey = 'true';
     let searchTime = 10;
 
-    $("#date").datepicker({dateFormat: 'yy-mm-dd'
-        ,changeYear: true //콤보박스에서 년 선택 가능
-        ,changeMonth: true //콤보박스에서 월 선택 가능
+    $("#date").datepicker({
+        dateFormat: 'yy-mm-dd',
+        changeYear: true,
+        changeMonth: true
     });
 </script>
 <br/>
 <br/>
-
 
 <input id="lineCheckBox" type="checkbox" name="line" onchange="getLineData(this.value)"> 차선 이탈
 <input id="pedestrianCheckBox" type="checkbox" name="pedestrian" onchange="getPedestrianData(this.value)"> 보행자 충돌
@@ -117,10 +127,10 @@
 <script>
 
     var container = document.getElementById('map');
-    var checkbox = document.getElementById('line');
-    var checkbox = document.getElementById('pedestrian');
-    var checkbox = document.getElementById('danger');
-    var checkbox = document.getElementById('front');
+    var Linecheckbox = document.getElementById('line');
+    var Pedstriancheckbox = document.getElementById('pedestrian');
+    var Dangercheckbox = document.getElementById('danger');
+    var Frontcheckbox = document.getElementById('front');
     var options = {
         center: new kakao.maps.LatLng(37.5642135, 127.0016985),
         level: 3
@@ -166,10 +176,17 @@
         for(let i = 0; i < result.length; i++){
             vhcleLot = result[i].vhcleLot;
             vhcleLat = result[i].vhcleLat;
+            
             let imageSrc = '/icons/car.png', // 마커이미지의 주소입니다
                 imageSize = new kakao.maps.Size(50, 25), // 마커이미지의 크기입니다
                 imageOption = {offset: new kakao.maps.Point(27, 69)}; // 마커이미지의 옵션입니다. 마커의 좌표와 일치시킬 이미지 안에서의 좌표를 설정합니다.
 
+			let fronticon = 'src/main/resources/static/icon/car-collision-caution.png'
+            let lineicon = 'src/main/resources/static/icon/lane-caution.png'
+            let pedestrianicon = 'src/main/resournces/static/icon/pedestrian-caution.png'
+            let dangericon = 'src/main/resources/static/icon/siren.png'
+                
+                
 // 마커의 이미지정보를 가지고 있는 마커이미지를 생성합니다
             let markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize, imageOption),
                 markerPosition = new kakao.maps.LatLng(vhcleLat, vhcleLot); // 마커가 표시될 위치입니다
