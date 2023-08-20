@@ -71,13 +71,13 @@ public class MongoRestServiceImpl implements MongoRestService {
             );
         }
         
-       //if문으로
+       //if문으로 차선이탈일 때 날짜 검색 시 Common클래스에 있는 데이터 가져오기
         if (collectionName.equals("COLLECTION_LINE")) {
             filter = Filters.and(
                 Filters.eq("trsmDy", String.valueOf(dd)),
                 Filters.eq("vhcleLot", common.getVhcleLot()),
                 Filters.eq("vhcleLat", common.getVhcleLat()),
-                Filters.eq("ldws", common.getLdws()),     // 필요한 다른 필드도 추가
+                Filters.eq("ldws", common.getLdws()),    
                 Filters.eq("pcws", common.getPcws())
                 
                
@@ -88,17 +88,17 @@ public class MongoRestServiceImpl implements MongoRestService {
                 Filters.eq("trsmDy", String.valueOf(dd)),
                 Filters.eq("vhcleLot", common.getVhcleLot()),
                 Filters.eq("vhcleLat", common.getVhcleLat()),
-                Filters.eq("ldws", common.getLdws()),     // 필요한 다른 필드도 추가
+                Filters.eq("ldws", common.getLdws()),     
                 Filters.eq("pcws", common.getPcws())   
                
             );
         }
         if (collectionName.equals("COLLECTION_FRONT")) {
             filter = Filters.and(
-                Filters.eq("trsmDy", String.valueOf(day)),
+                Filters.eq("trsmDy", String.valueOf(dd)),
                 Filters.eq("vhcleLot", common.getVhcleLot()),
                 Filters.eq("vhcleLat", common.getVhcleLat()),
-                Filters.eq("ldws", common.getLdws()),     // 필요한 다른 필드도 추가
+                Filters.eq("ldws", common.getLdws()),     
                 Filters.eq("pcws", common.getPcws())
                
             );
@@ -108,7 +108,7 @@ public class MongoRestServiceImpl implements MongoRestService {
                 Filters.eq("trsmDy", String.valueOf(dd)),
                 Filters.eq("vhcleLot", common.getVhcleLot()),
                 Filters.eq("vhcleLat", common.getVhcleLat()),
-                Filters.eq("ldws", common.getLdws()),     // 필요한 다른 필드도 추가
+                Filters.eq("ldws", common.getLdws()),     
                 Filters.eq("pcws", common.getPcws())
 
                
@@ -117,11 +117,11 @@ public class MongoRestServiceImpl implements MongoRestService {
         if (collectionName.equals("COLLECTION_DANGER")) {
             filter = Filters.and(
                 Filters.eq("trsmDy", String.valueOf(dd)),
-                Filters.eq("ldws", common.getLdws()),     // 필요한 다른 필드도 추가
+                Filters.eq("ldws", common.getLdws()),    
                 Filters.eq("pcws", common.getPcws()),
                 Filters.eq("detcLot", danger.getDetcLot()),
                 Filters.eq("detcLat", danger.getDetcLat()),
-                Filters.eq("itisCd", danger.getDetcLat()) 
+                Filters.eq("itisCd", danger.getItisCd()) 
 
             );
         }
