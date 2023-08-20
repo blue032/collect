@@ -4,6 +4,6 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Getter@Setter
-public class Pedestrian extends Common {
+public class Condition extends Common { //common클래스 상속받음
 
 }

@@ -1,5 +1,4 @@
-/*DataCollectionScheduler 클래스를 만들었습니다
- 스케줄링이용해서 자동수집하는 코드입니다.*/
+//스케줄링이용해서 자동수집하는 클래스
 package com.nkia.collect.service;
 
 import org.springframework.stereotype.Component;

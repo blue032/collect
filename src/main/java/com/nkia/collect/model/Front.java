@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Getter@Setter
-public class Pedestrian extends Common {
+public class Front extends Common {
 
+  
 }

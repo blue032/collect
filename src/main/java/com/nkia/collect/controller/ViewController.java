@@ -1,3 +1,5 @@
+//화면과 연동
+
 package com.nkia.collect.controller;
 
 import com.nkia.collect.service.CollectService;
