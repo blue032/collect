@@ -56,10 +56,12 @@ public class MongoRestServiceImpl implements MongoRestService {
 
         Common common = new Common();
         Danger danger = new Danger();
-        
-        String vhcleLotValue = common.getVhcleLot();
 
+               
+        //날짜(일)
         Bson filter = Filters.and(
+        		Filters.eq("trsmYear", "2023"),
+        		Filters.eq("trsmMt", "08"),
                 Filters.gte("trsmDy", Integer.parseInt(fromDate)),
                 Filters.lt("trsmDy", Integer.parseInt(toDate))
         );
@@ -164,6 +166,5 @@ public class MongoRestServiceImpl implements MongoRestService {
         MongoCollection<Document> collection = mongoDatabase.getCollection(collectionName);
         return collection.deleteOne(query);
     }
-
 
 }
