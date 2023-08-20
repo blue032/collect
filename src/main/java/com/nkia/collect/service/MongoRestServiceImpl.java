@@ -1,5 +1,6 @@
 package com.nkia.collect.service;
-
+import com.nkia.collect.model.Common; //common클래스 가져옴
+import com.nkia.collect.model.Danger;
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
@@ -51,86 +52,78 @@ public class MongoRestServiceImpl implements MongoRestService {
     //특정 쿼리 조건에 따라 문서 검색
     @Override
     public JSONArray findByQuery(String collectionName, String fromDate, String toDate, String time) {
-        MongoCollection<Document> collection = mongoDatabase.getCollection(collectionName); //몽고디비의 컬렉션 얻어옴
-        
+        MongoCollection<Document> collection = mongoDatabase.getCollection(collectionName);
 
-        
-        int year = 2023; // 원하는 연도를 설정
-        int month = 8;   // 원하는 월을 설정
+        Common common = new Common();
+        Danger danger = new Danger();
 
-        //filter라는 비슨객체 생성, 몽고디비 쿼리 구성하는 데 사용
-        Bson filter = Filters.and(Filters.gte("trsmDy", Integer.parseInt(fromDate)), // start just after our last position
-                Filters.lt("trsmDy", Integer.parseInt(toDate))); //trsmDy가 fromDatez(gte)이상 ~ toDate 미만(lt)
+        Bson filter = Filters.and(
+                Filters.gte("trsmDy", Integer.parseInt(fromDate)),
+                Filters.lt("trsmDy", Integer.parseInt(toDate))
+        );
 
-        //time 값이 비어있지 않으면
-        if(time != null && !time.isEmpty()) {
-            filter = Filters.and(Filters.gte("trsmDy", Integer.parseInt(fromDate)), // start just after our last position
-                    Filters.lte("trsmDy", Integer.parseInt(toDate))
-                    ,Filters.gte("trsmTm", time+"0000") // 예)10시 00 00초 ~ 10시 59분 59초
-                    , Filters.lte("trsmTm", time+"5959")
+        if (time != null && !time.isEmpty()) {
+            filter = Filters.and(filter,
+                    Filters.gte("trsmTm", time + "0000"),
+                    Filters.lte("trsmTm", time + "5959")
             );
         }
-        
-       //if문으로 차선이탈일 때 날짜 검색 시 Common클래스에 있는 데이터 가져오기
+
         if (collectionName.equals("COLLECTION_LINE")) {
             filter = Filters.and(
-                Filters.eq("trsmDy", String.valueOf(dd)),
-                Filters.eq("vhcleLot", common.getVhcleLot()),
-                Filters.eq("vhcleLat", common.getVhcleLat()),
-                Filters.eq("ldws", common.getLdws()),    
-                Filters.eq("pcws", common.getPcws())
-                
-               
+                    filter,
+                    Filters.eq("vhcleLot", common.getVhcleLot()),
+                    Filters.eq("vhcleLat", common.getVhcleLat()),
+                    Filters.eq("ldws", common.getLdws()),
+                    Filters.eq("pcws", common.getPcws())
             );
         }
+
         if (collectionName.equals("COLLECTION_CONDITION")) {
             filter = Filters.and(
-                Filters.eq("trsmDy", String.valueOf(dd)),
-                Filters.eq("vhcleLot", common.getVhcleLot()),
-                Filters.eq("vhcleLat", common.getVhcleLat()),
-                Filters.eq("ldws", common.getLdws()),     
-                Filters.eq("pcws", common.getPcws())   
-               
+                    filter,
+                    Filters.eq("vhcleLot", common.getVhcleLot()),
+                    Filters.eq("vhcleLat", common.getVhcleLat()),
+                    Filters.eq("ldws", common.getLdws()),
+                    Filters.eq("pcws", common.getPcws())
             );
         }
+
         if (collectionName.equals("COLLECTION_FRONT")) {
             filter = Filters.and(
-                Filters.eq("trsmDy", String.valueOf(dd)),
-                Filters.eq("vhcleLot", common.getVhcleLot()),
-                Filters.eq("vhcleLat", common.getVhcleLat()),
-                Filters.eq("ldws", common.getLdws()),     
-                Filters.eq("pcws", common.getPcws())
-               
+                    filter,
+                    Filters.eq("vhcleLot", common.getVhcleLot()),
+                    Filters.eq("vhcleLat", common.getVhcleLat()),
+                    Filters.eq("ldws", common.getLdws()),
+                    Filters.eq("pcws", common.getPcws())
             );
         }
+
         if (collectionName.equals("COLLECTION_PESTRIAN")) {
             filter = Filters.and(
-                Filters.eq("trsmDy", String.valueOf(dd)),
-                Filters.eq("vhcleLot", common.getVhcleLot()),
-                Filters.eq("vhcleLat", common.getVhcleLat()),
-                Filters.eq("ldws", common.getLdws()),     
-                Filters.eq("pcws", common.getPcws())
-
-               
+                    filter,
+                    Filters.eq("vhcleLot", common.getVhcleLot()),
+                    Filters.eq("vhcleLat", common.getVhcleLat()),
+                    Filters.eq("ldws", common.getLdws()),
+                    Filters.eq("pcws", common.getPcws())
             );
         }
+
         if (collectionName.equals("COLLECTION_DANGER")) {
             filter = Filters.and(
-                Filters.eq("trsmDy", String.valueOf(dd)),
-                Filters.eq("ldws", common.getLdws()),    
-                Filters.eq("pcws", common.getPcws()),
-                Filters.eq("detcLot", danger.getDetcLot()),
-                Filters.eq("detcLat", danger.getDetcLat()),
-                Filters.eq("itisCd", danger.getItisCd()) 
-
+                    filter,
+                    Filters.eq("ldws", common.getLdws()),
+                    Filters.eq("pcws", common.getPcws()),
+                    Filters.eq("detcLot", danger.getDetcLot()),
+                    Filters.eq("detcLat", danger.getDetcLat()),
+                    Filters.eq("itisCd", danger.getItisCd())
             );
         }
-    }
-        
-        FindIterable<Document> result = collection.find(filter); //위에서 정의한 filter 사용하여 문서 검색
+
+        FindIterable<Document> result = collection.find(filter);
         JSONArray array = new JSONArray();
-        for(Document d : result) {
-            array.put(new JSONObject(d.toJson())); 
+        for (Document d : result) {
+            array.put(new JSONObject(d.toJson()));
         }
 
         return array;

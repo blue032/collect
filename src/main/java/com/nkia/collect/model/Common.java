@@ -20,4 +20,20 @@ public class Common {
     private String vhcleLot;
     private String ldws; 
     private String pcws;
+    
+    public String getVhcleLot() {
+        return vhcleLot;
+    }
+    
+    public String getVhcleLat() {
+        return vhcleLat;
+    }
+    
+    public String getLdws() {
+        return ldws;
+    }
+    
+    public String getPcws() {
+        return pcws;
+    }
 }
