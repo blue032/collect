@@ -56,6 +56,8 @@ public class MongoRestServiceImpl implements MongoRestService {
 
         Common common = new Common();
         Danger danger = new Danger();
+        
+        String vhcleLotValue = common.getVhcleLot();
 
         Bson filter = Filters.and(
                 Filters.gte("trsmDy", Integer.parseInt(fromDate)),
