@@ -167,6 +167,8 @@
             data: {
                 "lineKey": lineKey,
                 "frontKey": frontKey,
+                "dangerKey": dangerKey,
+                "pedestrianKey": pedestrianKey,
                 "fromDate":"6",
                 "toDate":"16"
             },
@@ -198,18 +200,24 @@
             vhcleLot = result[i].vhcleLot;
             vhcleLat = result[i].vhcleLat;
             
-            let imageSrc = '/icons/car.png', // 마커이미지의 주소입니다
-                imageSize = new kakao.maps.Size(50, 25), // 마커이미지의 크기입니다
-                imageOption = {offset: new kakao.maps.Point(27, 69)}; // 마커이미지의 옵션입니다. 마커의 좌표와 일치시킬 이미지 안에서의 좌표를 설정합니다.
 
-			let fronticon = 'src/main/resources/static/icon/car-collision-caution.png'
-            let lineicon = 'src/main/resources/static/icon/lane-caution.png'
-            let pedestrianicon = 'src/main/resournces/static/icon/pedestrian-caution.png'
-            let dangericon = 'src/main/resources/static/icon/siren.png'
+            let fronticon = '/icons/car-collision-caution.png';
+                fimageSize = new kakao.maps.Size(50, 25), // 마커이미지의 크기입니다
+                fimageOption = {offset: new kakao.maps.Point(27, 69)}; //
+                
+            let lineicon = '/icons/lane-caution.png'
+                limageSize = new kakao.maps.Size(50, 25), // 마커이미지의 크기입니다
+                limageOption = {offset: new kakao.maps.Point(27, 69)}; //
+            let pedestrianicon = '/icons/pedestrian-caution.png'
+                pimageSize = new kakao.maps.Size(50, 25), // 마커이미지의 크기입니다
+                pimageOption = {offset: new kakao.maps.Point(27, 69)}; //
+            let dangericon = '/icons/warning.png'
+                dimageSize = new kakao.maps.Size(25, 25), // 마커이미지의 크기입니다
+                dimageOption = {offset: new kakao.maps.Point(27, 69)}; //
                 
                 
 // 마커의 이미지정보를 가지고 있는 마커이미지를 생성합니다
-            let markerImage = new kakao.maps.MarkerImage(fronticon,imageSize, imageOption),
+            let markerImage = new kakao.maps.MarkerImage(dangericon,dimageSize, dimageOption),
                 markerPosition = new kakao.maps.LatLng(vhcleLat, vhcleLot); // 마커가 표시될 위치입니다
 
 // 마커를 생성합니다
