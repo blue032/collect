@@ -71,53 +71,37 @@
 </div>
 
 <div class="datepicker-container">
-    <input type="text" id="date" style="padding: 8px 12px; font-size: 14px; border: 2px solid #000; /* 버튼 테두리 굵기 및 색상 변경 */">
+    <input type="text" id="startDate" style="padding: 8px 12px; font-size: 14px; border: 2px solid #000; /* 버튼 테두리 굵기 및 색상 변경 */"/>
+	<span> ~ </span>
+	<input type="text" id="endDate" style="padding: 8px 12px; font-size: 14px; border: 2px solid #000; /* 버튼 테두리 굵기 및 색상 변경 */"/>
 </div>
 
+<br/><br/><br/><br/>
 
-<script>
-
-    let lineKey = 'true';
-    let frontKey = 'true';
-    let dangerKey = 'true';
-    let pedestrianKey = 'true';
-    let searchTime = 10;
-
-    $("#date").datepicker({
-        dateFormat: 'yy-mm-dd',
-        changeYear: true,
-        changeMonth: true
-    });
-</script>
-<br/>
-<br/>
-
-<br/>
-<br/>
 <div id="map" style="width:1260px;height:600px;"></div>
 
 <div id = "checkboxContainer">
 	<div class = "checkboxGroup">
 		<label class = "checkbox">
-			<input id="lineCheckBox" type="checkbox" name="line" onchange="getLineData(this.value)"> 차선 이탈
+			<input id="lineCheckBox" type="checkbox" name="line" > 차선 이탈
 		</label>
 	</div>
 	
 	<div class = "checkboxGroup">
 		<label class = "checkboxLabel">
-			<input id="pedestrianCheckBox" type="checkbox" name="pedestrian" onchange="getPedestrianData(this.value)"> 보행자 충돌
+			<input id="pedestrianCheckBox" type="checkbox" name="pedestrian" > 보행자 충돌
 		</label>
 	</div>
 	
 		<div class = "checkboxGroup">
 		<label class = "checkboxLabel">
-			<input id="dangerCheckBox" type="checkbox" name="danger" onchange="getDangerData(this.value)"> 위험구간
+			<input id="dangerCheckBox" type="checkbox" name="danger" > 위험구간
 		</label>
 	</div>
 	
 	<div class = "checkboxGroup">
 		<label class = "checkboxLabel">
-			<input id="frontCheckBox" type="checkbox" name="front" onchange="getFrontData(this.value)"> 전방추돌
+			<input id="frontCheckBox" type="checkbox" name="front" > 전방추돌
 		</label>
 	</div>
 	
@@ -126,41 +110,73 @@
 
 <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=3146c1c993d2fc8e50666c0efbf85f30&libraries=services,clusterer,drawing"></script>
 <script>
+	const lineCheckBox = document.getElementById('lineCheckBox');
+	const pedestrianCheckBox = document.getElementById('pedestrianCheckBox');
+	const dangerCheckBox = document.getElementById('dangerCheckBox');
+	const frontCheckBox = document.getElementById('frontCheckBox');
 
-	function getLineData(value) {
-    	lineKey = value;
-    	getData();
+	let startDay = 0;
+	let endDay = 0;
+
+	$(document).ready(function () {
+		$.datepicker.setDefaults($.datepicker.regional['ko']);
+		$("#startDate").datepicker({
+			dateFormat: 'yy-mm-dd',
+			changeYear: false,
+			changeMonth: false,
+			onClose: function (selectedDate) {
+				startDay = selectedDate.split("-")[2];
+			}
+		});
+
+		$("#endDate").datepicker({
+			dateFormat: 'yyyy-mm-dd',
+			changeYear: false,
+			changeMonth: false,
+			onClose: function (selectedDate) {
+				endDay = selectedDate.split("-")[2];
+			}
+		});
+	});
+
+	let lineKey = lineCheckBox.checked;
+	let frontKey = frontCheckBox.checked;
+	let dangerKey = dangerCheckBox.checked;
+	let pedestrianKey = frontCheckBox.checked;
+
+	// 체크박스 상태에 따라 마커 표시 여부를 제어
+	lineCheckBox.addEventListener("change", changeValue);
+	frontCheckBox.addEventListener("change", changeValue);
+	pedestrianCheckBox.addEventListener("change", changeValue);
+	dangerCheckBox.addEventListener("change", changeValue);
+
+	function changeValue(event) {
+		let id = event.target.id;
+		if(id === "lineCheckBox"){
+			lineKey = event.target.checked;
+		}
+		if(id === "frontCheckBox"){
+			frontKey = event.target.checked;
+		}
+		if(id === "pedestrianCheckBox"){
+			pedestrianKey = event.target.checked;
+		}
+		if(id === "dangerCheckBox"){
+			dangerKey = event.target.checked;
+		}
+		getData();
 	}
 
-	function getPedestrianData(value) {
-    	pedestrianeKey = value;
-    	getData();
-	}
+	const container = document.getElementById('map');
 
-	function getDangerData(value) {
-    	dangerKey = value;
-    	getData();
-	}
-
-	function getFrontData(value) {
-    	frontKey = value;
-    	getData();
-	}
-
-    var container = document.getElementById('map');
-    var Linecheckbox = document.getElementById('line');
-    var Pedstriancheckbox = document.getElementById('pedestrian');
-    var Dangercheckbox = document.getElementById('danger');
-    var Frontcheckbox = document.getElementById('front');
-    var options = {
+    let options = {
         center: new kakao.maps.LatLng(37.5642135, 127.0016985),
         level: 3
     };
 
-    var map = new kakao.maps.Map(container, options);
+	let map = new kakao.maps.Map(container, options);
 
     function getData() {
-
         $.ajax({
             type:'POST', //요청 메서드
             url: 'http://localhost:8080/datas/cits', //요청 URI //요청 헤더
@@ -229,16 +245,6 @@
             marker.setMap(map)
         }
     }
-    
-// 체크박스 상태에 따라 마커 표시 여부를 제어
-	checkbox.addEventListener("change",
-		function () {
-			if (checkbox.checked) {
-				showMarkers(); 
-			} else {
-				hideMarkders();
-			}
-	});
 	
 	// 마커들을 생성하고 지도에 추가
 	const markers = [];
@@ -266,9 +272,8 @@
 			marker.setMap(null);
 		}
 	}
-	
 
-    window.onload = getData();
+	//    window.onload = getData();
 </script>
 
 

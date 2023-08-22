@@ -24,8 +24,6 @@ public class DataRestService {
     @PostMapping("/cits")
     public String getCits(@RequestParam Map<String, String> searchKeys) {
 
-        System.out.println(searchKeys.toString());
-
         JSONArray jsonArray = new JSONArray();
 
         boolean lineKey = Boolean.parseBoolean(searchKeys.get("lineKey"));
@@ -50,8 +48,6 @@ public class DataRestService {
         if (pedestrianKey) {
             jsonArray.put(searchService.getPedestrianData(searchKeys));
         }
-
-        System.out.println(jsonArray.toString());
 
         return jsonArray.toString();
     }

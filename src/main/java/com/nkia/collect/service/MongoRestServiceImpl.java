@@ -1,6 +1,6 @@
 package com.nkia.collect.service;
-import com.nkia.collect.model.Common; //common클래스 가져옴
-import com.nkia.collect.model.Danger;
+import com.nkia.collect.controller.model.Common; //common클래스 가져옴
+import com.nkia.collect.controller.model.Danger;
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
@@ -54,10 +54,6 @@ public class MongoRestServiceImpl implements MongoRestService {
     public JSONArray findByQuery(String collectionName, String fromDate, String toDate, String time) {
         MongoCollection<Document> collection = mongoDatabase.getCollection(collectionName);
 
-        Common common = new Common();
-        Danger danger = new Danger();
-
-               
         //날짜(일)
         Bson filter = Filters.and(
         		Filters.eq("trsmYear", "2023"),
@@ -70,57 +66,6 @@ public class MongoRestServiceImpl implements MongoRestService {
             filter = Filters.and(filter,
                     Filters.gte("trsmTm", time + "0000"),
                     Filters.lte("trsmTm", time + "5959")
-            );
-        }
-
-        if (collectionName.equals("COLLECTION_LINE")) {
-            filter = Filters.and(
-                    filter,
-                    Filters.eq("vhcleLot", common.getVhcleLot()),
-                    Filters.eq("vhcleLat", common.getVhcleLat()),
-                    Filters.eq("ldws", common.getLdws()),
-                    Filters.eq("pcws", common.getPcws())
-            );
-        }
-
-        if (collectionName.equals("COLLECTION_CONDITION")) {
-            filter = Filters.and(
-                    filter,
-                    Filters.eq("vhcleLot", common.getVhcleLot()),
-                    Filters.eq("vhcleLat", common.getVhcleLat()),
-                    Filters.eq("ldws", common.getLdws()),
-                    Filters.eq("pcws", common.getPcws())
-            );
-        }
-
-        if (collectionName.equals("COLLECTION_FRONT")) {
-            filter = Filters.and(
-                    filter,
-                    Filters.eq("vhcleLot", common.getVhcleLot()),
-                    Filters.eq("vhcleLat", common.getVhcleLat()),
-                    Filters.eq("ldws", common.getLdws()),
-                    Filters.eq("pcws", common.getPcws())
-            );
-        }
-
-        if (collectionName.equals("COLLECTION_PESTRIAN")) {
-            filter = Filters.and(
-                    filter,
-                    Filters.eq("vhcleLot", common.getVhcleLot()),
-                    Filters.eq("vhcleLat", common.getVhcleLat()),
-                    Filters.eq("ldws", common.getLdws()),
-                    Filters.eq("pcws", common.getPcws())
-            );
-        }
-
-        if (collectionName.equals("COLLECTION_DANGER")) {
-            filter = Filters.and(
-                    filter,
-                    Filters.eq("ldws", common.getLdws()),
-                    Filters.eq("pcws", common.getPcws()),
-                    Filters.eq("detcLot", danger.getDetcLot()),
-                    Filters.eq("detcLat", danger.getDetcLat()),
-                    Filters.eq("itisCd", danger.getItisCd())
             );
         }
 

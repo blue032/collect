@@ -1,4 +1,4 @@
-package com.nkia.collect.model;
+package com.nkia.collect.controller.model;
 
 import lombok.Getter;
 import lombok.Setter;
