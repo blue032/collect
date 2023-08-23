@@ -24,7 +24,7 @@ public class DataRestService {
     @PostMapping("/cits")
     public String getCits(@RequestParam Map<String, String> searchKeys) {
 
-        JSONArray jsonArray = new JSONArray();
+        JSONObject json = new JSONObject();
 
         boolean lineKey = Boolean.parseBoolean(searchKeys.get("lineKey"));
         boolean frontKey = Boolean.parseBoolean(searchKeys.get("frontKey"));
@@ -34,21 +34,21 @@ public class DataRestService {
         
         //if문을 사용해서 모든 선택된 키에 대해 검색을 할 수 있도록.
         if (lineKey) {
-            jsonArray.put(searchService.getLineData(searchKeys));
+            json.put(KEY_LINE, searchService.getLineData(searchKeys));
         }
         if (frontKey) {
-            jsonArray.put(searchService.getFrontData(searchKeys));
+            json.put(KEY_FRONT, searchService.getFrontData(searchKeys));
         }
         if (conditionKey) {
-            jsonArray.put(searchService.getConditionData(searchKeys)); 
+            json.put(KEY_CONDITION, searchService.getConditionData(searchKeys));
         }
         if (dangerKey) {
-            jsonArray.put(searchService.getDangerData(searchKeys)); 
+            json.put(KEY_DANGER, searchService.getDangerData(searchKeys));
         }
         if (pedestrianKey) {
-            jsonArray.put(searchService.getPedestrianData(searchKeys));
+            json.put(KEY_PEDESTRIAN, searchService.getPedestrianData(searchKeys));
         }
 
-        return jsonArray.toString();
+        return json.toString();
     }
 }

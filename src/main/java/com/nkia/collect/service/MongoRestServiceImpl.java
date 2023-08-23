@@ -59,7 +59,7 @@ public class MongoRestServiceImpl implements MongoRestService {
         		Filters.eq("trsmYear", "2023"),
         		Filters.eq("trsmMt", "08"),
                 Filters.gte("trsmDy", Integer.parseInt(fromDate)),
-                Filters.lt("trsmDy", Integer.parseInt(toDate))
+                Filters.lte("trsmDy", Integer.parseInt(toDate))
         );
 
         if (time != null && !time.isEmpty()) {
