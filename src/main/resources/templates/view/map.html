@@ -67,7 +67,7 @@
 <div class="title">V2X와 C-ITS를 활용한 교통 정보 수집과 분석</div>
 
 <div class="button-container">
-    <input type="button" value="데이터 가져오기" onclick="getData();">
+    <input id="getDataButton" type="button" value="데이터 가져오기" onclick="getData();">
 </div>
 
 <div class="datepicker-container">
@@ -124,8 +124,8 @@
 			dateFormat: 'yy-mm-dd',
 			changeYear: false,
 			changeMonth: false,
-			minDate: new Date('2023-08-01'),
-			maxDate: new Date('2023-08-31'),
+			minDate: new Date('2023-08-07'),
+			maxDate: new Date('2023-08-16'),
 			onClose: function (selectedDate) {
 				startDay = selectedDate.split("-")[2];
 			}
@@ -135,8 +135,8 @@
 			dateFormat: 'yy-mm-dd',
 			changeYear: false,
 			changeMonth: false,
-			minDate: new Date('2023-08-01'),
-			maxDate: new Date('2023-08-31'),
+			minDate: new Date('2023-08-07'),
+			maxDate: new Date('2023-08-16'),
 			onClose: function (selectedDate) {
 				endDay = selectedDate.split("-")[2];
 			}
@@ -173,8 +173,15 @@
 
 	let map = new kakao.maps.Map(container, options);
 	let markers = [];
+	
+	const getDataButton = document.getElementById('getDataButton');
 
     function getData() {
+    	
+        // 버튼이 클릭되었을 때 시각적 피드백
+        getDataButton.value = "데이터 가져오는 중..."; // 버튼 텍스트 변경
+        getDataButton.disabled = true; // 로딩 중에 버튼 비활성화
+        
         $.ajax({
             type:'POST', //요청 메서드
             url: 'http://localhost:8080/datas/cits', //요청 URI //요청 헤더
@@ -189,9 +196,15 @@
             dataType : 'json', //전송할 데이터 타입
             success : function(result) {//서버로부터 응답잉 도착하면 호출될 함수
                 newMap(result);
+                // 데이터 가져오기가 완료된 후 버튼 모양 복원
+                getDataButton.value = "데이터 가져오기"; // 원래 버튼 텍스트 복원
+                getDataButton.disabled = false; // 버튼 활성화
             },
             error : function() {
                 alert("error");
+                // 오류 발생 후 버튼 모양 복원
+                getDataButton.value = "데이터 가져오기"; // 원래 버튼 텍스트 복원
+                getDataButton.disabled = false; // 버튼 활성화
             } //에러가 발생했을 때 호출될 함수
         }); //$.ajax()
     }
