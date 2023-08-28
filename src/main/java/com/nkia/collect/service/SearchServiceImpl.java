@@ -1,3 +1,4 @@
+//서비스
 package com.nkia.collect.service;
 
 import com.mongodb.client.FindIterable;
@@ -8,7 +9,6 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.util.Map;
 
 @Service
@@ -19,7 +19,6 @@ public class SearchServiceImpl implements SearchService {
     private static final  String COLLECTION_CONDITION = "condition";
     private static final  String COLLECTION_DANGER = "danger";
     private static final  String COLLECTION_PEDESTRIAN= "pedestrian";
-
 
     @Autowired
     MongoRestService mongoRestService;
