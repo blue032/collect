@@ -1,5 +1,5 @@
 //Mongodb 주소와 연결하는 클래스
-
+//
 package com.nkia.collect.config;
 
 import com.mongodb.client.MongoClient;
