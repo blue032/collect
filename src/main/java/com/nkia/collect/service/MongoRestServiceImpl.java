@@ -1,6 +1,6 @@
 package com.nkia.collect.service;
-import com.nkia.collect.controller.model.Common; //common클래스 가져옴
-import com.nkia.collect.controller.model.Danger;
+/*import com.nkia.collect.controller.model.Common; //common클래스 가져옴
+import com.nkia.collect.controller.model.Danger;*/
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
